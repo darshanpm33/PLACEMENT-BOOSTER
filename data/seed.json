@@ -1,0 +1,167 @@
+{
+    "concepts": [
+        {
+            "category": "Quantitative Aptitude",
+            "topic": "Percentages",
+            "theory": "Percentage means 'per 100'. It is a fraction with denominator 100. It is denoted by symbol %.",
+            "formulas": [
+                "Percentage = (Value / Total Value) * 100",
+                "x% of y = (x/100) * y"
+            ],
+            "examples": "Example 1: Find 20% of 150 = (20/100)*150 = 30."
+        },
+        {
+            "category": "Quantitative Aptitude",
+            "topic": "Profit and Loss",
+            "theory": "Profit happens when Selling Price (SP) > Cost Price (CP). Loss happens when SP < CP.",
+            "formulas": [
+                "Profit = SP - CP",
+                "Loss = CP - SP",
+                "Profit % = (Profit/CP)*100",
+                "Loss % = (Loss/CP)*100"
+            ],
+            "examples": "Example: CP = 100, SP = 120. Profit = 20. Profit % = (20/100)*100 = 20%."
+        },
+        {
+            "category": "Quantitative Aptitude",
+            "topic": "Time and Work",
+            "theory": "Work done is directly proportional to time. If A can do a piece of work in n days, then A's 1 day's work = 1/n.",
+            "formulas": [
+                "Work = Rate \u00d7 Time",
+                "If A does work in x days, and B in y days, A+B 1 day work = 1/x + 1/y"
+            ],
+            "examples": "If A takes 10 days and B takes 15 days, together they take 1/(1/10+1/15) = 6 days."
+        }
+    ],
+    "aptitude": [
+        {
+            "q": "What is 20% of 300?",
+            "a": "30",
+            "b": "60",
+            "c": "90",
+            "d": "120",
+            "c_opt": "B",
+            "exp": "20/100 * 300 = 60",
+            "cat": "Percentages"
+        },
+        {
+            "q": "If CP=50, SP=75, find Profit %",
+            "a": "25%",
+            "b": "50%",
+            "c": "75%",
+            "d": "100%",
+            "c_opt": "B",
+            "exp": "Profit=25. 25/50 * 100 = 50%",
+            "cat": "Profit and Loss"
+        },
+        {
+            "q": "A can do a work in 20 days, B in 30 days. Together?",
+            "a": "10 days",
+            "b": "12 days",
+            "c": "15 days",
+            "d": "25 days",
+            "c_opt": "B",
+            "exp": "1/20 + 1/30 = 5/60 = 1/12. So 12 days.",
+            "cat": "Time and Work"
+        },
+        {
+            "q": "A train 100m long moving at 36kmph crosses a pole in?",
+            "a": "5s",
+            "b": "10s",
+            "c": "15s",
+            "d": "20s",
+            "c_opt": "B",
+            "exp": "36kmph = 10m/s. Time = Distance/Speed = 100/10 = 10s.",
+            "cat": "Time, Speed, Distance"
+        },
+        {
+            "q": "Ratio of 2 hours to 30 mins?",
+            "a": "4:1",
+            "b": "1:4",
+            "c": "2:1",
+            "d": "1:2",
+            "c_opt": "A",
+            "exp": "120 mins : 30 mins = 4:1",
+            "cat": "Ratio and Proportion"
+        },
+        {
+            "q": "Find missing number: 2, 5, 10, 17, ?",
+            "a": "24",
+            "b": "25",
+            "c": "26",
+            "d": "27",
+            "c_opt": "C",
+            "exp": "Differences are 3, 5, 7, 9. 17+9=26",
+            "cat": "Logical Reasoning"
+        },
+        {
+            "q": "Choose synonym for 'ABUNDANT'",
+            "a": "Scarce",
+            "b": "Plentiful",
+            "c": "Rare",
+            "d": "Little",
+            "c_opt": "B",
+            "exp": "Abundant means plentiful.",
+            "cat": "Verbal Ability"
+        }
+    ],
+    "coding": [
+        {
+            "t": "Reverse String",
+            "d": "Reverse a string.",
+            "s": "s[::-1]",
+            "diff": "Easy",
+            "l": "Python"
+        },
+        {
+            "t": "Fibonacci Series",
+            "d": "Print n fibonacci numbers.",
+            "s": "a, b = 0, 1\nfor _ in range(n):\n  print(a)\n  a, b = b, a+b",
+            "diff": "Easy",
+            "l": "Python"
+        },
+        {
+            "t": "Merge Sorted Arrays",
+            "d": "Merge two sorted arrays.",
+            "s": "sorted(arr1 + arr2)",
+            "diff": "Medium",
+            "l": "Python"
+        },
+        {
+            "t": "Anagram Check",
+            "d": "Check if two strings are anagrams.",
+            "s": "sorted(s1) == sorted(s2)",
+            "diff": "Easy",
+            "l": "Python"
+        },
+        {
+            "t": "Longest Palindromic Prefix",
+            "d": "Find length of longest palindromic prefix.",
+            "s": "...",
+            "diff": "Hard",
+            "l": "Python"
+        }
+    ],
+    "hr": [
+        {
+            "q": "Tell me about a time you failed.",
+            "s": "Use STAR method. Focus on what you learned.",
+            "c": "Behavioral"
+        },
+        {
+            "q": "How do you handle conflict?",
+            "s": "Communicate openly, listen, and find common ground.",
+            "c": "Behavioral"
+        },
+        {
+            "q": "Why should we hire you?",
+            "s": "Align your skills with the job description.",
+            "c": "Company Fit"
+        },
+        {
+            "q": "Where do you see yourself in 5 years?",
+            "s": "Aim to be a senior level contributor or leader.",
+            "c": "Career Goals"
+        }
+    ]
+}

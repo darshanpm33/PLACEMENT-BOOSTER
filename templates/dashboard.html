@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Placement Booster{% endblock %}
+
+{% block content %}
+<div class="dashboard-header animate-fade-in">
+    <div class="dash-top">
+        <div class="user-welcome">
+            <h2>Welcome Back, <span class="grad">{{ user.username }}</span>! <i class="fas fa-rocket"></i></h2>
+            <p>Your preparation roadmap is ready. Choose a section to begin.</p>
+        </div>
+        
+        <div class="streak-bar">
+            <div class="s-icon"><i class="fas fa-fire" style="color:#f59e0b;"></i></div>
+            <div class="s-info">
+                <h3>{{ user.streak }} Day Streak</h3>
+                <p>Login daily for bonus points!</p>
+            </div>
+        </div>
+    </div>
+    
+    {% if tip %}
+    <div class="tip-card animate-zoom-in" style="margin-bottom: 2rem;">
+        <div class="tip-icon"><i class="fas fa-lightbulb"></i></div>
+        <div class="tip-info">
+            <h4>Daily Tip: {{ tip.category }}</h4>
+            <p>{{ tip.tip }}</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="dashboard-grid">
+    <a href="{{ url_for('aptitude') }}" class="dashboard-card card-aptitude animate-zoom-in" style="animation-delay: 0.1s;">
+        <div class="card-icon"><i class="fas fa-brain"></i></div>
+        <div class="card-info">
+            <h3>Aptitude Training</h3>
+            <p>Master logical, quant, and verbal reasoning skills.</p>
+        </div>
+        <div class="card-action">Start Training <i class="fas fa-arrow-right"></i></div>
+    </a>
+    
+    <a href="{{ url_for('coding') }}" class="dashboard-card card-coding animate-zoom-in" style="animation-delay: 0.2s;">
+        <div class="card-icon"><i class="fas fa-code"></i></div>
+        <div class="card-info">
+            <h3>Coding Practice</h3>
+            <p>Practice frequent coding interview challenges.</p>
+        </div>
+        <div class="card-action">Solve Problems <i class="fas fa-arrow-right"></i></div>
+    </a>
+    
+    <a href="{{ url_for('hr') }}" class="dashboard-card card-hr animate-zoom-in" style="animation-delay: 0.3s;">
+        <div class="card-icon"><i class="fas fa-user-tie"></i></div>
+        <div class="card-info">
+            <h3>HR Interview Tips</h3>
+            <p>Master storytelling for behavioral and culture checks.</p>
+        </div>
+        <div class="card-action">Explore Tips <i class="fas fa-arrow-right"></i></div>
+    </a>
+    
+    <a href="{{ url_for('mock_test') }}" class="dashboard-card card-mock animate-zoom-in" style="animation-delay: 0.4s;">
+        <div class="card-icon"><i class="fas fa-stopwatch"></i></div>
+        <div class="card-info">
+            <h3>Daily Mock Assessment</h3>
+            <p>Simulate exam environments with real-time scoring.</p>
+        </div>
+        <div class="card-action">Take Test <i class="fas fa-arrow-right"></i></div>
+    </a>
+</div>
+
+<div class="recent-section animate-fade-in" style="animation-delay: 0.5s;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem;">
+        <h3>Recent Performance Overview</h3>
+        <span class="score-tag">Avg. Score: {{ avg_score }}%</span>
+    </div>
+    
+    {% if records %}
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        {% for record in records %}
+        <div class="recent-row">
+            <div>
+                <strong style="display:block;">{{ record.date.strftime('%b %d, %Y') }}</strong>
+                <small style="color:var(--text-dim);">Assessment Results</small>
+            </div>
+            <div style="text-align:right;">
+                <span style="font-weight:800; color:var(--success);">{{ record.score }}/{{ record.total }}</span>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width:{{ (record.score / record.total * 100) if record.total > 0 else 0 }}%;"></div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color:var(--text-dim);">No tests taken yet. Start with your first Mock Test today!</p>
+    {% endif %}
+</div>
+{% endblock %}

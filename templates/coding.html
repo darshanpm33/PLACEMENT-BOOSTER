@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Coding Practice | Placement Booster Forge{% endblock %}
+
+{% block content %}
+<div class="page-header animate-fade-in">
+    <h1>Coding <span class="grad">Forge</span> Challenge</h1>
+    <p>Master the most frequent coding interview algorithms with optimized solutions.</p>
+</div>
+
+<div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap: 1rem; align-items:center; margin-bottom: 2rem;">
+    <div class="filter-bar animate-fade-in" style="animation-delay: 0.1s; margin-bottom: 0;">
+        <a href="{{ url_for('coding', difficulty='all') }}" class="filter-btn {% if selected_diff == 'all' %}active{% endif %}">
+            <i class="fas fa-layer-group"></i> All Challenges
+        </a>
+        <a href="{{ url_for('coding', difficulty='Easy') }}" class="filter-btn {% if selected_diff == 'Easy' %}active{% endif %}">
+            <i class="fas fa-signal" style="color:var(--success);"></i> Easy
+        </a>
+        <a href="{{ url_for('coding', difficulty='Medium') }}" class="filter-btn {% if selected_diff == 'Medium' %}active{% endif %}">
+            <i class="fas fa-signal" style="color:var(--warning);"></i> Medium
+        </a>
+        <a href="{{ url_for('coding', difficulty='Hard') }}" class="filter-btn {% if selected_diff == 'Hard' %}active{% endif %}">
+            <i class="fas fa-signal" style="color:var(--danger);"></i> Hard
+        </a>
+    </div>
+    <form action="{{ url_for('coding') }}" method="GET" style="display:flex; gap:0.5rem;">
+        {% if selected_diff != 'all' %}<input type="hidden" name="difficulty" value="{{ selected_diff }}">{% endif %}
+        <input type="text" name="search" placeholder="Search challenges..." value="{{ search }}" style="padding:0.6rem 1rem; border-radius:50px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:var(--text); width:250px;">
+        <button type="submit" class="btn-primary" style="padding: 0.6rem 1rem;"><i class="fas fa-search"></i></button>
+    </form>
+</div>
+
+<div class="questions-container animate-fade-in" style="animation-delay:0.2s;">
+    {% if questions %}
+        {% for q in questions %}
+        <div class="coding-card animate-zoom-in" style="animation-delay: {{ loop.index0 * 0.1 }}s;">
+            <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.3rem; font-weight: 800;">{{ q.title }}</h2>
+                <div class="diff-badge diff-{{ q.difficulty }}">
+                    <i class="fas fa-bolt"></i> {{ q.difficulty }}
+                </div>
+            </div>
+            
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom: 1.5rem; line-height:1.7;">{{ q.description }}</p>
+
+            <div style="display:flex; gap:1rem;">
+                <button class="btn-primary" onclick="toggleSolution('sol-{{ q.id }}')" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">
+                    <i class="fas fa-eye" style="margin-right:0.4rem;"></i> Show Optimized Solution
+                </button>
+                
+                {% if q.id in completed_ids %}
+                <button class="btn-success" disabled style="padding: 0.6rem 1.2rem; font-size: 0.85rem; cursor:default; opacity:0.8;">
+                    <i class="fas fa-check-double"></i> Completed
+                </button>
+                {% else %}
+                <button class="btn-secondary" id="comp-btn-{{ q.id }}" onclick="markCompleted({{ q.id }})" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">
+                    <i class="fas fa-check"></i> Mark Completed
+                </button>
+                {% endif %}
+            </div>
+            
+            <div id="sol-{{ q.id }}" class="hidden animate-zoom-in" style="margin-top: 1.5rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.5rem;">
+                    <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--text-dim);">
+                        <i class="fab fa-python"></i> {{ q.language }} Implementation
+                    </span>
+                    <button class="copy-btn" onclick="copyCode('code-{{ q.id }}')" style="background:none; border:none; color:var(--primary-light); cursor:pointer; font-size:0.8rem;">
+                        <i class="fas fa-copy"></i> Copy Snippet
+                    </button>
+                </div>
+                <div class="code-block" id="code-{{ q.id }}">
+<pre><code>{{ q.sample_answer }}</code></pre>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="coding-card" style="text-align:center; padding: 3rem;">
+            <p style="color:var(--text-dim);">No coding challenges found under this difficulty.</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleSolution(id) {
+    const sol = document.getElementById(id);
+    sol.classList.toggle('hidden');
+    const btn = sol.previousElementSibling;
+    if (sol.classList.contains('hidden')) {
+        btn.innerHTML = '<i class="fas fa-eye"></i> Show Optimized Solution';
+    } else {
+        btn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Optimized Solution';
+    }
+}
+
+function copyCode(id) {
+    const code = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(code);
+    const copyBtn = document.querySelector(`#${id}`).previousElementSibling.querySelector('.copy-btn');
+    const original = copyBtn.innerHTML;
+    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    setTimeout(() => copyBtn.innerHTML = original, 2000);
+}
+
+async function markCompleted(qId) {
+    const btn = document.getElementById(`comp-btn-${qId}`);
+    try {
+        const resp = await fetch(`/complete_coding/${qId}`, { method: 'POST' });
+        const data = await resp.json();
+        
+        if (data.success) {
+            btn.innerHTML = '<i class="fas fa-check-double"></i> Completed';
+            btn.className = 'btn-success';
+            btn.disabled = true;
+            btn.style.opacity = '0.8';
+            btn.style.cursor = 'default';
+            
+            // Show a temporary success message
+            const status = document.createElement('div');
+            status.textContent = data.message;
+            status.style.cssText = 'position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:var(--success); color:white; padding:1rem 2rem; border-radius:50px; font-weight:700; z-index:9999; box-shadow:0 10px 30px rgba(16,185,129,0.4);';
+            document.body.appendChild(status);
+            setTimeout(() => status.remove(), 3000);
+        }
+    } catch (e) {
+        console.error("Failed to mark completed", e);
+    }
+}
+</script>
+{% endblock %}

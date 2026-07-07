@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Placement Booster{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container container-nav">
+            <a href="{{ url_for('index') }}" class="logo">
+                <i class="fas fa-rocket"></i> PLACEMENT<span style="font-weight: 300; margin-left: 2px;">BOOSTER</span>
+            </a>
+            <nav class="nav-links">
+                {% if 'user_id' in session %}
+                    <a href="{{ url_for('dashboard') }}" class="nav-item">Dashboard</a>
+                    <a href="{{ url_for('aptitude') }}" class="nav-item">Aptitude</a>
+                    <a href="{{ url_for('coding') }}" class="nav-item">Coding</a>
+                    <a href="{{ url_for('hr') }}" class="nav-item">HR Qs</a>
+                    <a href="{{ url_for('leaderboard') }}" class="nav-item"><i class="fas fa-trophy" style="color: var(--warning); margin-right: 4px;"></i> Rank</a>
+                    <a href="{{ url_for('profile') }}" class="nav-item"><i class="fas fa-user-circle" style="margin-right: 4px;"></i> Profile</a>
+                    <a href="{{ url_for('mock_test') }}" class="btn-primary" style="margin-left: 0.5rem; padding: 0.5rem 1rem;">Mock Test</a>
+                    <a href="{{ url_for('logout') }}" class="nav-item logout-link" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-item">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn-primary" style="padding: 0.5rem 1rem;">Join Now</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">
+                            {% if category == 'success' %}<i class="fas fa-check-circle"></i>
+                            {% elif category == 'danger' %}<i class="fas fa-exclamation-circle"></i>
+                            {% elif category == 'info' %}<i class="fas fa-info-circle"></i>
+                            {% elif category == 'warning' %}<i class="fas fa-exclamation-triangle"></i>
+                            {% endif %}
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Chatbot Overlay -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-icon" id="chatbotIcon" title="Talk to AI Assistant">
+            <i class="fas fa-comment-dots"></i>
+        </div>
+        <div class="chatbot-window hidden" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h3>Placement Assistant</h3>
+                <i class="fas fa-times close-chatbot" id="closeChatbot"></i>
+            </div>
+            <div class="chatbot-messages" id="chatMessages">
+                <div class="bot-msg pulse-in">Hi! I am your Placement Booster assistant. How can I help you today?</div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask about preparation...">
+                <button id="sendChat"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Placement Booster. Built for Excellence.</p>
+        </div>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

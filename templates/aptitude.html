@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Aptitude | Placement Booster Masterclass{% endblock %}
+
+{% block content %}
+<div class="page-header animate-fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <h1>Aptitude <span class="grad">Training</span> Mastery</h1>
+            <p>Master Logical, Quant, and Verbal Reasoning modules one question at a time.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('concepts') }}" class="btn-secondary" style="padding: 0.8rem 1.5rem; background: rgba(124, 58, 237, 0.1); border-color: rgba(124, 58, 237, 0.3); color: var(--primary-light);">
+                <i class="fas fa-book-open" style="margin-right: 0.5rem;"></i> Study Concepts
+            </a>
+        </div>
+    </div>
+</div>
+
+<div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap: 1rem; align-items:center; margin-bottom: 2rem;">
+    <div class="filter-bar animate-fade-in" style="animation-delay: 0.1s; margin-bottom: 0;">
+        <a href="{{ url_for('aptitude', category='all') }}" class="filter-btn {% if selected == 'all' %}active{% endif %}">
+            <i class="fas fa-layer-group"></i> All Modules
+        </a>
+        {% for category in categories %}
+        <a href="{{ url_for('aptitude', category=category) }}" class="filter-btn {% if selected == category %}active{% endif %}">
+            {{ category }}
+        </a>
+        {% endfor %}
+    </div>
+    <form action="{{ url_for('aptitude') }}" method="GET" style="display:flex; gap:0.5rem;">
+        {% if selected != 'all' %}<input type="hidden" name="category" value="{{ selected }}">{% endif %}
+        <input type="text" name="search" placeholder="Search questions..." value="{{ search }}" style="padding:0.6rem 1rem; border-radius:50px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:var(--text); width:250px;">
+        <button type="submit" class="btn-primary" style="padding: 0.6rem 1rem;"><i class="fas fa-search"></i></button>
+    </form>
+</div>
+
+<div class="questions-container animate-fade-in" style="animation-delay: 0.2s;">
+    {% if questions %}
+        {% for q in questions %}
+        <div class="q-card">
+            <div class="q-category"><i class="fas fa-tag"></i> {{ q.category }}</div>
+            <div class="q-header">
+                <span class="q-num">Q{{ loop.index }}.</span>
+                <p class="q-text">{{ q.question }}</p>
+            </div>
+            
+            <div class="q-options">
+                <button class="q-option" onclick="checkAnswer({{ q.id }}, 'A', '{{ q.correct_option }}')">
+                    <strong>A.</strong> {{ q.option_a }}
+                </button>
+                <button class="q-option" onclick="checkAnswer({{ q.id }}, 'B', '{{ q.correct_option }}')">
+                    <strong>B.</strong> {{ q.option_b }}
+                </button>
+                <button class="q-option" onclick="checkAnswer({{ q.id }}, 'C', '{{ q.correct_option }}')">
+                    <strong>C.</strong> {{ q.option_c }}
+                </button>
+                <button class="q-option" onclick="checkAnswer({{ q.id }}, 'D', '{{ q.correct_option }}')">
+                    <strong>D.</strong> {{ q.option_d }}
+                </button>
+            </div>
+            
+            <div id="ans-{{ q.id }}" class="q-ans-box hidden animate-zoom-in">
+                <div class="correct-badge"><i class="fas fa-check-circle"></i> Correct Explanation</div>
+                <p style="font-size:0.95rem; line-height:1.7;">{{ q.explanation }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="q-card" style="text-align:center; padding: 3rem;">
+            <p style="color:var(--text-dim);">No questions found under this category.</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function checkAnswer(qid, selected, correct) {
+    const ansBox = document.getElementById('ans-'+qid);
+    const options = ansBox.previousElementSibling.children;
+    
+    // UI feedback only, score update happens only in Mock Test
+    if (selected === correct) {
+        ansBox.classList.remove('hidden');
+        ansBox.style.borderColor = 'var(--success)';
+        ansBox.style.background = 'rgba(16,185,129,0.12)';
+    } else {
+        ansBox.classList.remove('hidden');
+        ansBox.style.borderColor = 'var(--danger)';
+        ansBox.style.background = 'rgba(244,63,94,0.12)';
+        ansBox.querySelector('.correct-badge').innerHTML = '<i class="fas fa-times-circle"></i> Keep Trying! Solution:';
+        ansBox.querySelector('.correct-badge').style.background = 'var(--danger)';
+    }
+}
+</script>
+{% endblock %}

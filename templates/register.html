@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Join Placement Booster | Start Your Journey{% endblock %}
+
+{% block content %}
+<div class="form-wrapper animate-fade-in">
+    <div class="form-card">
+        <h2>Create Account <i class="fas fa-user-plus" style="color: var(--primary-light); margin-left:8px;"></i></h2>
+        <p class="form-sub">Start building your career-ready profile today.</p>
+        
+        <form action="{{ url_for('register') }}" method="POST" id="registerForm">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <i class="fas fa-user icon-input"></i>
+                <input type="text" name="username" id="regUsername" required placeholder="Choose a unique username">
+                <small id="usernameStatus" class="form-status"></small>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <i class="fas fa-envelope icon-input"></i>
+                <input type="email" name="email" id="regEmail" required placeholder="name@email.com">
+                <small id="emailStatus" class="form-status"></small>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <i class="fas fa-lock icon-input"></i>
+                <input type="password" name="password" id="regPassword" required placeholder="At least 6 characters">
+                <div class="strength-bar-wrap">
+                    <div id="strengthBar" class="strength-bar"></div>
+                </div>
+                <small id="pwdMsg" class="form-status"></small>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label class="form-label">Confirm Password</label>
+                <i class="fas fa-shield-check icon-input"></i>
+                <input type="password" name="confirm_password" id="regConfirm" required placeholder="Re-enter password">
+                <small id="matchStatus" class="form-status"></small>
+            </div>
+            
+            <button type="submit" id="regSubmitBtn" class="btn-primary w-full" style="font-size: 1.1rem; padding: 1rem;">
+                Create Free Account
+            </button>
+        </form>
+        
+        <p class="auth-helper">Already have an account? <a href="{{ url_for('login') }}">Login instead</a></p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const usernameInput = document.getElementById('regUsername');
+    const emailInput = document.getElementById('regEmail');
+    const passwordInput = document.getElementById('regPassword');
+    const confirmInput = document.getElementById('regConfirm');
+    const submitBtn = document.getElementById('regSubmitBtn');
+    
+    let checks = { user: false, email: false, pwd: false, match: false };
+    
+    function updateBtn() {
+        submitBtn.disabled = !(checks.user && checks.email && checks.pwd && checks.match);
+        submitBtn.style.opacity = submitBtn.disabled ? "0.6" : "1";
+    }
+
+    // Username check
+    usernameInput.addEventListener('input', async () => {
+        const username = usernameInput.value.trim();
+        const status = document.getElementById('usernameStatus');
+        if (username.length < 3) { status.textContent = ""; checks.user = false; updateBtn(); return; }
+        
+        const resp = await fetch('/check_username', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ username })
+        });
+        const data = await resp.json();
+        
+        if (data.exists) {
+            status.textContent = "Username already taken!";
+            status.style.color = "var(--danger)";
+            checks.user = false;
+        } else {
+            status.textContent = "Username available!";
+            status.style.color = "var(--success)";
+            checks.user = true;
+        }
+        updateBtn();
+    });
+
+    // Email check
+    emailInput.addEventListener('input', async () => {
+        const email = emailInput.value.trim();
+        const status = document.getElementById('emailStatus');
+        if (!email.includes('@')) { checks.email = false; updateBtn(); return; }
+        
+        const resp = await fetch('/check_email', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email })
+        });
+        const data = await resp.json();
+        
+        if (data.exists) {
+            status.textContent = "Email already registered!";
+            status.style.color = "var(--danger)";
+            checks.email = false;
+        } else {
+            status.textContent = "Email look clean!";
+            status.style.color = "var(--success)";
+            checks.email = true;
+        }
+        updateBtn();
+    });
+
+    // Strength Meter
+    passwordInput.addEventListener('input', () => {
+        const pwd = passwordInput.value;
+        const sBar = document.getElementById('strengthBar');
+        const msg = document.getElementById('pwdMsg');
+        checks.pwd = pwd.length >= 6;
+
+        let strength = 0;
+        if (pwd.length >= 6) strength++;
+        if (/[A-Z]/.test(pwd)) strength++;
+        if (/[0-9]/.test(pwd)) strength++;
+        if (/[!-@#$%^&*]/.test(pwd)) strength++;
+
+        const colors = ['#f43f5e', '#f59e0b', '#3b82f6', '#10b981'];
+        const widths = ['25%', '50%', '75%', '100%'];
+        sBar.style.width = widths[strength-1] || '0';
+        sBar.style.background = colors[strength-1] || 'transparent';
+        
+        if (!checks.pwd) {
+            msg.textContent = "Pass must be at least 6 chars";
+            msg.style.color = "var(--danger)";
+        } else {
+            msg.textContent = "";
+        }
+        updateBtn();
+        checkMatch();
+    });
+
+    // Confirm Match
+    const checkMatch = () => {
+        const status = document.getElementById('matchStatus');
+        if (!confirmInput.value) return;
+        if (confirmInput.value === passwordInput.value) {
+            status.textContent = "Passwords match!";
+            status.style.color = "var(--success)";
+            checks.match = true;
+        } else {
+            status.textContent = "Passwords don't match!";
+            status.style.color = "var(--danger)";
+            checks.match = false;
+        }
+        updateBtn();
+    };
+    confirmInput.addEventListener('input', checkMatch);
+});
+</script>
+{% endblock %}

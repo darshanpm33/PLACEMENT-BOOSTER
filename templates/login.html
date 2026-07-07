@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Placement Booster{% endblock %}
+
+{% block content %}
+<div class="form-wrapper animate-fade-in">
+    <div class="form-card">
+        <h2>Welcome Back <i class="fas fa-hand-wave" style="color: var(--warning); margin-left:8px;"></i></h2>
+        <p class="form-sub">Login to resume your preparation roadmap.</p>
+        
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <i class="fas fa-user icon-input"></i>
+                <input type="text" name="username" required placeholder="Enter your username">
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label class="form-label">Password</label>
+                <i class="fas fa-lock icon-input"></i>
+                <input type="password" name="password" required placeholder="Enter your password">
+            </div>
+            
+            <button type="submit" class="btn-primary w-full" style="font-size: 1.1rem; padding: 1rem;">
+                Sign In <i class="fas fa-sign-in-alt" style="margin-left: 0.5rem;"></i>
+            </button>
+        </form>
+        
+        <p class="auth-helper">Don't have an account yet? <a href="{{ url_for('register') }}">Join free now</a></p>
+    </div>
+</div>
+{% endblock %}

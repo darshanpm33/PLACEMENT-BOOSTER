@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome | Placement Booster – Ignite Your Career{% endblock %}
+
+{% block content %}
+<section class="hero-section animate-fade-in">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-sparkles"></i> The Ultimate Preparation Hub
+        </div>
+        <h1>Ignite Your <span class="grad">Placement</span> Journey!</h1>
+        <p>Master <strong>Aptitude</strong>, <strong>Coding</strong>, and <strong>HR Interviews</strong> with our AI-powered roadmap. Join 5,000+ students landing their dream jobs today.</p>
+        
+        <div class="hero-btns">
+            {% if 'user_id' in session %}
+                <a href="{{ url_for('dashboard') }}" class="btn-primary">Go to Dashboard <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn-primary">Get Started Now</a>
+                <a href="{{ url_for('register') }}" class="btn-outline">Join the Community</a>
+            {% endif %}
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <h3>100+</h3>
+                <p>Questions</p>
+            </div>
+            <div class="hero-stat">
+                <h3>5k+</h3>
+                <p>Students</p>
+            </div>
+            <div class="hero-stat">
+                <h3>98%</h3>
+                <p>Success Rate</p>
+            </div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="hero-orb">
+            <i class="fas fa-rocket"></i>
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <h2 class="section-title">Preparation Excellence</h2>
+    <p class="section-sub">Curated modules designed to handle the most rigorous recruitment processes.</p>
+    
+    <div class="features-grid">
+        <div class="feature-card animate-zoom-in" style="animation-delay: 0.1s;">
+            <i class="fas fa-brain fa-3x"></i>
+            <h3>Aptitude Mastery</h3>
+            <p>Solve curated MCQs across Quantitative, Logical, and Verbal reasoning modules.</p>
+        </div>
+        <div class="feature-card animate-zoom-in" style="animation-delay: 0.2s;">
+            <i class="fas fa-laptop-code fa-3x"></i>
+            <h3>Coding Forge</h3>
+            <p>Master the most frequent coding interview challenges with optimized solutions.</p>
+        </div>
+        <div class="feature-card animate-zoom-in" style="animation-delay: 0.3s;">
+            <i class="fas fa-user-tie fa-3x"></i>
+            <h3>HR Excellence</h3>
+            <p>Perfect your storytelling with guided answers for the toughest HR rounds.</p>
+        </div>
+        <div class="feature-card animate-zoom-in" style="animation-delay: 0.4s;">
+            <i class="fas fa-stopwatch fa-3x"></i>
+            <h3>Mock Mastery</h3>
+            <p>Simulate real exam environments with timed tests and instant analytics.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
